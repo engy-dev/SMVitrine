@@ -7,7 +7,6 @@
     et construire un fichier exécutable (.jar).
 
     Version de Spring Boot : 4.1.x
-    -------------------------------
     Spring Boot 3.x est arrivé en fin de support (la dernière version, 3.5.16,
     a atteint sa fin de vie "open source" le 30 juin 2026 : plus aucun correctif
     de sécurité gratuit n'est publié pour cette branche). Ce projet utilise donc
