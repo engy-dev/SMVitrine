@@ -1,0 +1,224 @@
+/* =============================================================================
+   style.css — Système de design de SM Consulting
+   =============================================================================
+   Ce fichier centralise :
+     1. Les "design tokens" (variables CSS) : couleurs, typographies, espacements.
+     2. Une réinitialisation (reset) légère des styles par défaut du navigateur.
+     3. Des classes utilitaires réutilisées par plusieurs composants Vue
+        (conteneur centré, boutons, étiquettes de section...).
+
+   Direction artistique retenue :
+   Le cabinet accompagne des humains au sein d'organisations : la charte
+   évoque à la fois la rigueur structurelle de l'entreprise (vert encre
+   profond, grille nette) et la chaleur du contact humain (accent doré,
+   touche corail réservée aux petites touches). Le motif "réseau de nœuds"
+   utilisé dans le héros symbolise les liens entre les personnes et les
+   organisations — le cœur du métier de conseil RH.
+   ============================================================================= */
+
+:root {
+  /* --- Couleurs ------------------------------------------------------- */
+  --color-ink: #17241f;               /* texte principal, quasi-noir teinté de vert */
+  --color-forest: #1b3a34;            /* couleur de marque : vert encre profond */
+  --color-forest-light: #2c5048;      /* variante plus claire (survols sur fond forêt) */
+  --color-paper: #f5f7f3;             /* fond principal du site, blanc cassé légèrement vert */
+  --color-paper-alt: #ffffff;         /* fond des cartes, contraste doux avec --color-paper */
+  --color-gold: #c99a3b;              /* accent principal : appels à l'action, mise en valeur */
+  --color-gold-light: #e4c27a;        /* survol des éléments dorés */
+  --color-blush: #e2b9a6;             /* accent secondaire, utilisé avec parcimonie */
+  --color-line: rgba(23, 36, 31, 0.12); /* traits fins de séparation */
+  --color-line-on-forest: rgba(245, 247, 243, 0.18); /* traits fins sur fond foncé */
+
+  /* --- Typographie ------------------------------------------------------ */
+  --font-display: 'Newsreader', Georgia, 'Times New Roman', serif; /* titres éditoriaux */
+  --font-body: 'Manrope', 'Segoe UI', system-ui, sans-serif;       /* texte courant, UI */
+
+  /* --- Échelle d'espacement (basée sur un rythme de 8px) --------------- */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4.5rem;
+  --space-7: 7rem;
+
+  /* --- Mise en page ------------------------------------------------------ */
+  --container-width: 1180px;
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --shadow-card: 0 12px 32px -18px rgba(23, 36, 31, 0.35);
+}
+
+/* --- Réinitialisation légère ------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Respecte les préférences d'accessibilité des utilisateurs qui souhaitent
+   réduire les animations (voir aussi les animations du héros). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.12;
+  margin: 0;
+  color: var(--color-forest);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Style de focus visible clavier — accessibilité indispensable, ne jamais
+   supprimer "outline" sans fournir une alternative aussi visible. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* --- Classes utilitaires partagées entre composants --------------------- */
+
+/* Conteneur centré à largeur maximale, utilisé dans quasiment tous les
+   composants pour aligner leur contenu sur une même grille horizontale. */
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 var(--space-3);
+  }
+}
+
+/* Petite étiquette en majuscules utilisée en en-tête de section
+   (ex : "NOS SERVICES", "NOTRE MÉTHODE") pour donner un repère éditorial
+   avant chaque grand titre. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* Bouton principal (rempli, doré) : utilisé pour les appels à l'action
+   les plus importants (ex : "Demander un échange"). */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 0.9rem 1.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-gold);
+  background-color: var(--color-gold);
+  color: var(--color-forest);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-gold-light);
+  border-color: var(--color-gold-light);
+  transform: translateY(-1px);
+}
+
+/* Bouton secondaire (contour) : utilisé pour les actions moins prioritaires,
+   par exemple sur fond sombre (section héros, pied de page). */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: 0.85rem 1.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line-on-forest);
+  background-color: transparent;
+  color: var(--color-paper);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-paper);
+  background-color: rgba(245, 247, 243, 0.06);
+}
+
+/* Rythme vertical standard entre deux sections du site. */
+.section {
+  padding: var(--space-7) 0;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: var(--space-6) 0;
+  }
+}

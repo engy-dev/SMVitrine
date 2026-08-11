@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!--
+    Point d'entrée HTML de l'application.
+    Vite injecte automatiquement les scripts nécessaires au build final.
+    Vue vient ensuite "monter" toute l'application dans la balise
+    <div id="app"></div> ci-dessous (voir src/main.js).
+-->
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Métadonnées de référencement (SEO) de base : à affiner selon les
+         mots-clés réellement ciblés par SM Consulting. -->
+    <title>SM Consulting — Cabinet de conseil en ressources humaines</title>
+    <meta
+      name="description"
+      content="SM Consulting accompagne les entreprises dans leur stratégie RH : recrutement, formation, organisation et gestion du changement. Demandez un premier échange gratuit."
+    />
+
+    <!-- Polices Google Fonts utilisées par le site : Newsreader (titres) et
+         Manrope (texte courant). Voir frontend/src/style.css pour le détail
+         du système typographique. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Vue.js remplace le contenu de cette div par l'intégralité de
+         l'application au chargement de la page. -->
+    <div id="app"></div>
+
+    <!-- Point d'entrée JavaScript de l'application (voir src/main.js). Le
+         type="module" est nécessaire pour utiliser les imports ES modules
+         que Vite gère nativement en développement. -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

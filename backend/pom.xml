@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Fichier de configuration Maven (pom.xml)
+    =========================================
+    Ce fichier décrit le projet backend "SM Consulting" et toutes ses dépendances.
+    Maven l'utilise pour télécharger les librairies nécessaires, compiler le code
+    et construire un fichier exécutable (.jar).
+
+    Version de Spring Boot : 4.1.x
+    -------------------------------
+    Spring Boot 3.x est arrivé en fin de support (la dernière version, 3.5.16,
+    a atteint sa fin de vie "open source" le 30 juin 2026 : plus aucun correctif
+    de sécurité gratuit n'est publié pour cette branche). Ce projet utilise donc
+    Spring Boot 4.1, qui repose sur Spring Framework 7 et Jakarta EE 11.
+
+    Bonne nouvelle : cette montée de version majeure reste beaucoup plus légère
+    que le passage de Spring Boot 2 à 3 (qui avait imposé la migration complète
+    de javax.* vers jakarta.*). Notre code utilisait déjà exclusivement le
+    namespace jakarta.* (voir les entités, DTO et validations), il n'y a donc
+    aucun changement de package à faire ici. Les principaux changements de
+    plateforme apportés par Spring Boot 4 sont :
+      - Socle Java inchangé : Java 17 minimum (le même qu'en Spring Boot 3),
+        avec un support de premier plan pour Java 25.
+      - Jakarta EE 11 (Jakarta Servlet 6.1, Jakarta Persistence 3.2,
+        Jakarta Bean Validation 3.1), ce qui entraîne automatiquement des
+        versions plus récentes de Tomcat (11+) et Hibernate (7.x) — gérées
+        pour nous par le BOM Spring Boot, sans rien à configurer manuellement.
+      - Jackson 3 comme sérialiseur JSON par défaut (transparent pour notre
+        code : nos DTO restent de simples classes Java avec getters/setters).
+
+    Pour lancer le projet en local :
+        cd backend
+        ./mvnw spring-boot:run   (ou "mvn spring-boot:run" si Maven est installé globalement)
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        Spring Boot fournit un "parent POM" qui prédéfinit des versions cohérentes
+        pour toutes les dépendances Spring, ainsi que des plugins de build utiles
+        (comme celui qui permet de générer un .jar exécutable).
+
+        Version 4.1.0 : version stable recommandée au moment de la rédaction de
+        ce boilerplate (publiée le 10 juin 2026). Elle succède à la branche 4.0
+        (dont le support open source s'arrête en décembre 2026) : partir
+        directement sur 4.1 évite d'avoir à migrer une deuxième fois peu après.
+        Pensez à vérifier régulièrement sur https://spring.io/projects/spring-boot
+        si une version 4.1.x plus récente (correctifs de sécurité/bugs) est
+        disponible, et à la utiliser à la place.
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.0</version>
+        <relativePath/> <!-- laisser Maven chercher le parent dans le dépôt central -->
+    </parent>
+
+    <!-- Identité de notre projet -->
+    <groupId>com.smconsulting</groupId>
+    <artifactId>backend</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>backend</name>
+    <description>API backend du site vitrine de SM Consulting (cabinet de conseil RH)</description>
+
+    <properties>
+        <!--
+            Version de Java utilisée pour compiler le projet.
+            Spring Boot 4 maintient un socle minimal à Java 17 (identique à
+            Spring Boot 3) tout en offrant un support de premier plan pour les
+            versions plus récentes (Java 25 au moment de la sortie de Boot 4.1).
+            17 reste un choix sûr et largement compatible ; libre à vous de
+            passer à 21 ou 25 si votre environnement de déploiement le permet.
+        -->
+        <java.version>17</java.version>
+    </properties>
+
+    <dependencies>
+        <!--
+            spring-boot-starter-web :
+            Fournit tout ce qu'il faut pour créer une API REST (serveur web
+            Tomcat embarqué — désormais en version 11, compatible Jakarta
+            Servlet 6.1 — Jackson 3 pour le JSON, annotations @RestController,
+            etc.)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--
+            spring-boot-starter-data-jpa :
+            Fournit Hibernate (ORM, désormais en version 7.x pour Jakarta
+            Persistence 3.2) et Spring Data JPA pour faciliter l'accès à la
+            base de données (repositories, requêtes automatiques, etc.)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!--
+            spring-boot-starter-validation :
+            Permet d'utiliser les annotations de validation (@NotBlank, @Email,
+            etc.) sur nos objets DTO afin de vérifier automatiquement les
+            données reçues depuis le formulaire de contact du site. S'appuie
+            désormais sur Jakarta Bean Validation 3.1 / Hibernate Validator 9.
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!--
+            Base de données H2 :
+            Une base de données en mémoire, idéale pour démarrer un projet
+            rapidement sans installer de serveur de base de données. Le BOM de
+            Spring Boot 4.1 sélectionne automatiquement une version de H2
+            compatible avec Hibernate 7 — inutile de fixer un numéro de version
+            ici. À remplacer par PostgreSQL/MySQL en production (voir README).
+        -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Dépendances utiles pour écrire des tests (JUnit, Mockito...) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+                Ce plugin permet de construire un .jar "exécutable" qui contient
+                le serveur web embarqué : on peut le lancer avec "java -jar backend.jar"
+            -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
