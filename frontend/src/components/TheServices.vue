@@ -12,60 +12,29 @@
  * codées en dur dans le template : cela rend le contenu facile à modifier,
  * réordonner ou étendre sans toucher à la structure HTML/CSS.
  */
-const services = [
-  {
-    titre: 'Recrutement & acquisition de talents',
-    description:
-      "Définition des besoins, sourcing ciblé, évaluation des candidats et accompagnement jusqu'à l'intégration — pour des recrutements qui tiennent dans la durée.",
-  },
-  {
-    titre: 'Formation & développement des compétences',
-    description:
-      "Diagnostic des compétences clés, conception de parcours de formation sur mesure et animation d'ateliers pour faire monter vos équipes en compétence.",
-  },
-  {
-    titre: 'Organisation & conduite du changement',
-    description:
-      "Réorganisation de services, fusions d'équipes, nouveaux modes de travail : nous préparons et accompagnons vos transformations pour limiter les frictions.",
-  },
-  {
-    titre: 'Marque employeur & communication RH',
-    description:
-      "Clarification de votre proposition de valeur employeur et des messages qui l'accompagnent, pour attirer les bons profils et fidéliser vos équipes.",
-  },
-  {
-    titre: 'Rémunération & avantages sociaux',
-    description:
-      "Audit de vos grilles salariales, benchmark marché et refonte de votre politique de rémunération pour rester compétitif et équitable.",
-  },
-  {
-    titre: 'Coaching & accompagnement managérial',
-    description:
-      "Accompagnement individuel ou collectif de vos managers, pour renforcer leur posture de leadership au quotidien.",
-  },
-]
+defineProps({
+  services: {
+    type: Object,
+    default: null
+  }
+})
 </script>
 
 <template>
-  <section id="services" class="section services">
+  <section v-if="services" id="services" class="section services">
     <div class="container">
       <header class="services__header">
-        <p class="eyebrow">Nos services</p>
+        <p class="eyebrow">{{ services.eyebrow }}</p>
         <h2 class="services__title">
-          Une expertise RH complète, mobilisée selon vos priorités du moment
+          {{ services.titre }}
         </h2>
         <p class="services__intro">
-          Que vous ayez besoin d'un accompagnement ponctuel ou d'un partenaire
-          RH sur la durée, nos consultants interviennent sur l'ensemble du
-          cycle de vie du collaborateur.
+          {{ services.intro }}
         </p>
       </header>
 
       <div class="services__grid">
-        <article v-for="service in services" :key="service.titre" class="service-card">
-          <!-- Icône décorative simple (motif "nœud" cohérent avec l'identité
-               visuelle du site), non essentielle à la compréhension du
-               contenu : masquée aux lecteurs d'écran. -->
+        <article v-for="service in services.services" :key="service.titre" class="service-card">
           <svg class="service-card__icon" viewBox="0 0 40 40" aria-hidden="true">
             <circle cx="20" cy="20" r="18" fill="none" stroke="var(--color-line)" stroke-width="1" />
             <circle cx="20" cy="20" r="4" fill="var(--color-gold)" />
@@ -74,6 +43,11 @@ const services = [
           <p class="service-card__description">{{ service.description }}</p>
         </article>
       </div>
+    </div>
+  </section>
+  <section v-else id="services" class="section services">
+    <div class="container">
+      <p class="eyebrow">Chargement…</p>
     </div>
   </section>
 </template>

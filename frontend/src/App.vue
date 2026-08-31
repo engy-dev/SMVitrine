@@ -50,7 +50,7 @@
 
   <main>
     <TheHero :hero="page?.hero"/>
-    <TheServices />
+    <TheServices :services="page?.services"/>
     <TheMethod />
     <TheAbout :about="page?.about" />
     <TheTestimonials />
