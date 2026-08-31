@@ -7,50 +7,48 @@
  * coordonnées. On y trouve un court texte de positionnement ainsi qu'une
  * liste de valeurs, plus facilement scannable qu'un long paragraphe.
  */
-const valeurs = [
-  {
-    titre: 'Proximité de terrain',
-    description: "Nos consultants passent du temps dans vos équipes, pas seulement en salle de réunion.",
-  },
-  {
-    titre: 'Transparence',
-    description: 'Des recommandations honnêtes, y compris quand elles sont inconfortables à entendre.',
-  },
-  {
-    titre: 'Résultats mesurables',
-    description: "Chaque mission démarre avec des indicateurs de succès définis ensemble dès le départ.",
-  },
-]
+  import { ref, onMounted } from 'vue'
+  import { apiGet } from '../config/api'
+  // Rempli de manière asynchrone par l'appel à l'API ci-dessous ; null tant
+  // que la réponse n'est pas arrivée, ce que le template doit gérer.
+  const about = ref(null)
+
+  onMounted(async () => {
+    try {
+      about.value = await apiGet('/api/vitrine/about?page=home')
+    } catch (error) {
+      console.error('Impossible de charger la section "À propos" :', error)
+    }
+  })
+
 </script>
 
 <template>
   <section id="a-propos" class="section about">
     <div class="container about__grid">
-      <div class="about__text">
-        <p class="eyebrow">À propos de SM Consulting</p>
-        <h2 class="about__title">
-          Un cabinet indépendant, au service des équipes autant que des dirigeants
-        </h2>
-        <p class="about__paragraph">
-          Fondé par des praticiens RH passés par la direction d'équipes en
-          PME comme en grand groupe, SM Consulting a été créé avec une
-          conviction simple&nbsp;: la performance d'une organisation repose
-          d'abord sur la façon dont elle traite ses collaborateurs.
-        </p>
-        <p class="about__paragraph">
-          Nous intervenons partout en France, auprès d'entreprises de 20 à
-          2&nbsp;000 collaborateurs, dans des secteurs variés — industrie,
-          services, tech, associations. Notre taille volontairement humaine
-          nous permet de rester exigeants sur la qualité de chaque mission.
-        </p>
-      </div>
+      <template v-if="about">
+        <div class="about__text">
+          <p class="eyebrow">{{ about.eyebrow }}</p>
+          <h2 class="about__title">
+            {{ about.titre }}
+          </h2>
+          <p
+            v-for="(paragraphe, index) in about.paragraphes"
+            :key="index"
+            class="about__paragraph"
+          >
+            {{ paragraphe }}
+          </p>
+        </div>
 
-      <ul class="about__values">
-        <li v-for="valeur in valeurs" :key="valeur.titre" class="about__value">
-          <h3>{{ valeur.titre }}</h3>
-          <p>{{ valeur.description }}</p>
-        </li>
-      </ul>
+        <ul class="about__values">
+          <li v-for="valeur in about.valeurs" :key="valeur.titre" class="about__value">
+            <h3>{{ valeur.titre }}</h3>
+            <p>{{ valeur.description }}</p>
+          </li>
+        </ul>
+      </template>
+      <p v-else class="about__paragraph">Chargement…</p>
     </div>
   </section>
 </template>
