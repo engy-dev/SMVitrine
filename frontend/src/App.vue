@@ -51,7 +51,7 @@
   <main>
     <TheHero :hero="page?.hero"/>
     <TheServices :services="page?.services"/>
-    <TheMethod />
+    <TheMethod :method="page?.method" />
     <TheAbout :about="page?.about" />
     <TheTestimonials />
     <TheContactForm />

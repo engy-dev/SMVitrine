@@ -8,49 +8,34 @@
  * est pertinente : elle porte une information réelle sur l'ordre du
  * déroulement d'une mission, plutôt que d'être un simple habillage visuel.
  */
-const etapes = [
-  {
-    numero: '01',
-    titre: 'Diagnostic',
-    description:
-      "Nous prenons le temps de comprendre votre organisation, vos enjeux et vos contraintes à travers des entretiens ciblés avec les parties prenantes clés.",
-  },
-  {
-    numero: '02',
-    titre: 'Stratégie',
-    description:
-      "Nous formulons des recommandations concrètes et priorisées, adaptées à votre taille, votre secteur et vos ressources internes.",
-  },
-  {
-    numero: '03',
-    titre: 'Déploiement',
-    description:
-      "Nos consultants interviennent directement sur le terrain aux côtés de vos équipes pour mettre en œuvre les actions définies ensemble.",
-  },
-  {
-    numero: '04',
-    titre: 'Suivi',
-    description:
-      "Nous mesurons les résultats obtenus et ajustons l'accompagnement dans la durée, pour que les effets se maintiennent au-delà de la mission.",
-  },
-]
+  defineProps({
+    method: {
+      type: Object,
+      default: null
+    }
+  })
 </script>
 
 <template>
-  <section id="methode" class="section method">
+  <section v-if="method" id="methode" class="section method">
     <div class="container">
       <header class="method__header">
-        <p class="eyebrow">Notre méthode</p>
-        <h2 class="method__title">Un déroulé simple, pensé pour des résultats durables</h2>
+        <p class="eyebrow">{{ method.eyebrow }}</p>
+        <h2 class="method__title">{{ method.titre }}</h2>
       </header>
 
       <ol class="method__timeline">
-        <li v-for="etape in etapes" :key="etape.numero" class="method__step">
+        <li v-for="etape in method.etapes" :key="etape.numero" class="method__step">
           <span class="method__number" aria-hidden="true">{{ etape.numero }}</span>
           <h3 class="method__step-title">{{ etape.titre }}</h3>
           <p class="method__step-description">{{ etape.description }}</p>
         </li>
       </ol>
+    </div>
+  </section>
+  <section v-else id="methode" class="section method">
+    <div class="container">
+      <p class="eyebrow">Chargement…</p>
     </div>
   </section>
 </template>
