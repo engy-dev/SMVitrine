@@ -7,38 +7,24 @@
  * en ligne du site, remplacez-les par de vrais témoignages, avec l'accord
  * explicite des personnes citées (nom, fonction, entreprise).
  */
-const temoignages = [
-  {
-    citation:
-      "SM Consulting nous a aidés à structurer notre fonction RH alors que nous passions de 30 à 80 salariés en un an. Un accompagnement concret, jamais théorique.",
-    auteur: 'Camille Bernard',
-    fonction: 'Directrice Générale, Atlas Industrie',
-  },
-  {
-    citation:
-      "Le travail sur notre marque employeur a directement fait baisser notre délai moyen de recrutement. L'équipe comprend vite les enjeux business, pas seulement RH.",
-    auteur: 'Julien Ferreira',
-    fonction: 'DRH, Groupe Norden',
-  },
-  {
-    citation:
-      "Un accompagnement au changement mené avec beaucoup d'écoute auprès de nos équipes, dans une période sensible pour l'entreprise.",
-    auteur: 'Sophie Lacombe',
-    fonction: 'Fondatrice, Studio Lacombe',
-  },
-]
+  defineProps({
+    testimonials: {
+      type: Object,
+      default: null
+    }
+  })
 </script>
 
 <template>
-  <section id="avis" class="section testimonials">
+  <section v-if="testimonials" id="avis" class="section testimonials">
     <div class="container">
       <header class="testimonials__header">
-        <p class="eyebrow">Ils nous font confiance</p>
-        <h2 class="testimonials__title">Ce que nos clients disent de nos missions</h2>
+        <p class="eyebrow">{{ testimonials.eyebrow }}</p>
+        <h2 class="testimonials__title">{{ testimonials.titre }}</h2>
       </header>
 
       <div class="testimonials__grid">
-        <blockquote v-for="temoignage in temoignages" :key="temoignage.auteur" class="testimonial-card">
+        <blockquote v-for="(temoignage, index) in testimonials.temoignages" :key="index" class="testimonial-card">
           <p class="testimonial-card__quote">« {{ temoignage.citation }} »</p>
           <footer class="testimonial-card__footer">
             <span class="testimonial-card__auteur">{{ temoignage.auteur }}</span>
@@ -46,6 +32,11 @@ const temoignages = [
           </footer>
         </blockquote>
       </div>
+    </div>
+  </section>
+  <section v-else id="avis" class="section testimonials">
+    <div class="container">
+      <p class="eyebrow">Chargement…</p>
     </div>
   </section>
 </template>
