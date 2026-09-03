@@ -31,9 +31,9 @@ const anneeCourante = new Date().getFullYear()
       </nav>
 
       <div class="footer__contact">
-        <p>12 rue de l'Exemple, 75000 Paris</p>
+        <p><a href="https://maps.app.goo.gl/jBwNX1gpTxGw1AL4A" target="_blank">8 Rue des Bles, 93210 Saint-Denis</a></p>
         <p><a href="mailto:contact@sm-consulting.fr">contact@sm-consulting.fr</a></p>
-        <p><a href="tel:+33100000000">01 00 00 00 00</a></p>
+        <p><a href="tel:+33158340155">01 58 34 01 55</a></p>
       </div>
     </div>
 
