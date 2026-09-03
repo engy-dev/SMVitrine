@@ -13,12 +13,29 @@
  * secondes par un visiteur qui découvre le site pour la première fois.
  */
 
-  defineProps({
+  import { computed } from 'vue'
+
+  const props = defineProps({
     hero: {
       type: Object,
       default: null
     }
   })
+
+  const BASE_YEAR = 2006
+
+  const stats = computed(() => {
+    if (!props.hero?.stats) return []
+
+    return props.hero.stats.map(stat => {
+      if (stat.libelle?.includes("d'expérience")) {
+        const years = new Date().getFullYear() - BASE_YEAR
+        return { ...stat, valeur: `${years} ans` }
+      }
+      return stat
+    })
+  })
+
 </script>
 
 <template>
@@ -73,7 +90,7 @@
         </div>
 
         <dl class="hero__stats">
-          <div v-for="(stat, index) in hero.stats" :key="index" class="hero__stat">
+          <div v-for="(stat, index) in stats" :key="index" class="hero__stat">
             <dt>{{ stat.valeur }}</dt>
             <dd>{{ stat.libelle }}</dd>
           </div>
