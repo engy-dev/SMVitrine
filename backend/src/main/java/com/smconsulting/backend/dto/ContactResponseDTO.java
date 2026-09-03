@@ -1,4 +1,5 @@
 package com.smconsulting.backend.dto;
+import java.util.UUID;
 
 /**
  * DTO renvoyé au frontend après le traitement d'une demande de contact.
@@ -10,13 +11,21 @@ package com.smconsulting.backend.dto;
 public class ContactResponseDTO {
 
     private String message;
-    private Long id;
+    private UUID id;
 
     public ContactResponseDTO() {
     }
 
-    public ContactResponseDTO(String message, Long id) {
+    public ContactResponseDTO(String message, UUID id) {
         this.message = message;
+        this.id = id;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -26,13 +35,5 @@ public class ContactResponseDTO {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

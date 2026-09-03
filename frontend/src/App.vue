@@ -53,8 +53,8 @@
     <TheServices :services="page?.services"/>
     <TheMethod :method="page?.method" />
     <TheAbout :about="page?.about" />
-    <TheTestimonials :testimonials="page?.testimonials"  />
-    <TheContactForm />
+    <TheTestimonials :testimonials="page?.testimonials" />
+    <TheContactForm :contact="page?.contact" />
   </main>
 
   <TheFooter />

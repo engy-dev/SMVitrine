@@ -5,6 +5,7 @@ public record PageContentResponse(
         AboutSectionResponse about,
         ServicesSectionResponse services,
         MethodSectionResponse method,
-        TestimonialsSectionResponse testimonials
+        TestimonialsSectionResponse testimonials,
+        ContactSectionResponse contact
 ) {
 }

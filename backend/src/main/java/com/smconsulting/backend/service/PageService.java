@@ -11,17 +11,20 @@ public class PageService {
     private final ServicesSectionService servicesSectionService;
     private final MethodSectionService methodSectionService;
     private final TestimonialsSectionService testimonialsSectionService;
+    private final ContactSectionService contactSectionService;
 
     public PageService(HeroService heroService,
                         AboutService aboutService,
                         ServicesSectionService servicesSectionService,
                         MethodSectionService methodSectionService,
-                        TestimonialsSectionService testimonialsSectionService) {
+                        TestimonialsSectionService testimonialsSectionService,
+                        ContactSectionService contactSectionService) {
         this.heroService = heroService;
         this.aboutService = aboutService;
         this.servicesSectionService = servicesSectionService;
         this.methodSectionService = methodSectionService;
         this.testimonialsSectionService = testimonialsSectionService;
+        this.contactSectionService = contactSectionService;
     }
 
     public PageContentResponse getPageContent(String slug) {
@@ -30,7 +33,8 @@ public class PageService {
                 aboutService.getAboutSection(slug),
                 servicesSectionService.getServicesSection(slug),
                 methodSectionService.getMethodSection(slug),
-                testimonialsSectionService.getTestimonialsSection(slug)
+                testimonialsSectionService.getTestimonialsSection(slug),
+                contactSectionService.getContactSection(slug)
         );
     }
 }

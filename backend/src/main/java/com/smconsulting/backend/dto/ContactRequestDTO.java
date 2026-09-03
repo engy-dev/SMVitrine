@@ -3,6 +3,7 @@ package com.smconsulting.backend.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.AssertTrue;
 
 /**
  * DTO (Data Transfer Object) représentant les données envoyées par le
@@ -48,6 +49,17 @@ public class ContactRequestDTO {
     @NotBlank(message = "Le message ne peut pas être vide.")
     @Size(max = 2000, message = "Le message ne doit pas dépasser 2000 caractères.")
     private String message;
+
+    @AssertTrue(message = "Vous devez accepter d'être recontacté pour envoyer ce formulaire.")
+    private Boolean consentement;
+
+    public Boolean getConsentement() {
+        return consentement;
+    }
+
+    public void setConsentement(Boolean consentement) {
+        this.consentement = consentement;
+    }
 
     public ContactRequestDTO() {
     }

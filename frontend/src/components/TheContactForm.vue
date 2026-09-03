@@ -22,21 +22,16 @@ const formulaire = reactive({
   entreprise: '',
   sujet: '',
   message: '',
+  consentement: false
 })
 
 // Liste des sujets proposés dans le formulaire : garder cette liste ici
-// (plutôt que côté backend) permet de la faire évoluer facilement sans
-// toucher à l'API. Le backend accepte n'importe quelle chaîne de caractères
-// pour ce champ (voir ContactRequestDTO.java).
-const sujetsProposes = [
-  'Recrutement',
-  'Formation',
-  'Organisation & conduite du changement',
-  'Marque employeur',
-  'Rémunération & avantages sociaux',
-  'Coaching managérial',
-  'Autre demande',
-]
+defineProps({
+  contact: {
+    type: Object,
+    default: null
+  }
+})
 
 // États de l'interface, indépendants des données du formulaire lui-même.
 const envoiEnCours = ref(false)
@@ -68,7 +63,9 @@ async function soumettreFormulaire() {
 
     // Vide le formulaire après un envoi réussi, au cas où l'utilisateur
     // souhaiterait consulter à nouveau la page sans la recharger.
-    Object.keys(formulaire).forEach((cle) => (formulaire[cle] = ''))
+    Object.keys(formulaire).forEach((cle) => {
+      formulaire[cle] = cle === 'consentement' ? false : ''
+    })
   } catch (erreur) {
     if (erreur.erreursDeChamp) {
       Object.assign(erreursDeChamp, erreur.erreursDeChamp)
@@ -84,21 +81,17 @@ async function soumettreFormulaire() {
 <template>
   <section id="contact" class="section contact">
     <div class="container contact__grid">
-      <div class="contact__intro">
-        <p class="eyebrow">Parlons de votre projet</p>
+      <div v-if="contact" class="contact__intro">
+        <p class="eyebrow">{{ contact.eyebrow }}</p>
         <h2 class="contact__title">
-          Un premier échange, sans engagement, pour cerner vos besoins
+          {{ contact.titre }}
         </h2>
         <p class="contact__text">
-          Décrivez-nous votre contexte en quelques lignes : un consultant
-          SM Consulting vous recontacte sous 48h ouvrées pour convenir d'un
-          rendez-vous téléphonique ou en visioconférence.
+          {{ contact.texte }}
         </p>
 
         <ul class="contact__points">
-          <li>Échange initial de 30 minutes offert</li>
-          <li>Réponse sous 48h ouvrées</li>
-          <li>Interlocuteur unique tout au long de la mission</li>
+          <li v-for="(point, index) in contact.points" :key="index">{{ point }}</li>
         </ul>
       </div>
 
@@ -178,7 +171,7 @@ async function soumettreFormulaire() {
             <label for="sujet">Sujet de votre demande</label>
             <select id="sujet" v-model="formulaire.sujet" name="sujet">
               <option value="" disabled>Sélectionnez un sujet</option>
-              <option v-for="sujet in sujetsProposes" :key="sujet" :value="sujet">
+              <option v-for="sujet in contact?.sujets" :key="sujet" :value="sujet">
                 {{ sujet }}
               </option>
             </select>
@@ -195,6 +188,22 @@ async function soumettreFormulaire() {
             ></textarea>
             <p v-if="erreursDeChamp.message" class="contact-form__erreur">
               {{ erreursDeChamp.message }}
+            </p>
+          </div>
+
+          <div class="contact-form__field contact-form__field--checkbox">
+            <label for="consentement">
+              <input
+                id="consentement"
+                v-model="formulaire.consentement"
+                type="checkbox"
+                name="consentement"
+                required
+              />
+              J'accepte d'être recontacté(e) par SM Consulting au sujet de ma demande. *
+            </label>
+            <p v-if="erreursDeChamp.consentement" class="contact-form__erreur">
+              {{ erreursDeChamp.consentement }}
             </p>
           </div>
 
@@ -360,6 +369,19 @@ async function soumettreFormulaire() {
 .contact__success p {
   margin-top: var(--space-2);
   color: rgba(23, 36, 31, 0.7);
+}
+
+.contact-form__field--checkbox label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-weight: 400;
+  color: var(--color-ink);
+}
+
+.contact-form__field--checkbox input[type='checkbox'] {
+  width: auto;
+  margin-top: 0.2rem;
 }
 
 @media (max-width: 860px) {
