@@ -15,14 +15,32 @@
  * (imports, variables, fonctions) est automatiquement exposé au <template>
  * ci-dessous, sans avoir besoin d'un bloc "export default { ... }" explicite.
  */
-import TheHeader from './components/TheHeader.vue'
-import TheHero from './components/TheHero.vue'
-import TheServices from './components/TheServices.vue'
-import TheMethod from './components/TheMethod.vue'
-import TheAbout from './components/TheAbout.vue'
-import TheTestimonials from './components/TheTestimonials.vue'
-import TheContactForm from './components/TheContactForm.vue'
-import TheFooter from './components/TheFooter.vue'
+  import TheHeader from './components/TheHeader.vue'
+  import TheHero from './components/TheHero.vue'
+  import TheServices from './components/TheServices.vue'
+  import TheMethod from './components/TheMethod.vue'
+  import TheAbout from './components/TheAbout.vue'
+  import TheTestimonials from './components/TheTestimonials.vue'
+  import TheContactForm from './components/TheContactForm.vue'
+  import TheFooter from './components/TheFooter.vue'
+  import { ref, onMounted } from 'vue'
+  import { apiGet } from './config/api'
+
+  const page = ref(null)
+  const error = ref(null)
+
+  async function fetchPageContent(slug = 'home') {
+    try {
+      page.value = await apiGet(`/api/vitrine/page?slug=${slug}`)
+      error.value = null
+    } catch (err) {
+      error.value = err
+    }
+  }
+
+  onMounted(() => {
+    fetchPageContent('home')
+  })
 </script>
 
 <template>
@@ -31,12 +49,12 @@ import TheFooter from './components/TheFooter.vue'
   <TheHeader />
 
   <main>
-    <TheHero />
-    <TheServices />
-    <TheMethod />
-    <TheAbout />
-    <TheTestimonials />
-    <TheContactForm />
+    <TheHero :hero="page?.hero"/>
+    <TheServices :services="page?.services"/>
+    <TheMethod :method="page?.method" />
+    <TheAbout :about="page?.about" />
+    <TheTestimonials :testimonials="page?.testimonials" />
+    <TheContactForm :contact="page?.contact" />
   </main>
 
   <TheFooter />

@@ -7,17 +7,10 @@
  * coordonnées. On y trouve un court texte de positionnement ainsi qu'une
  * liste de valeurs, plus facilement scannable qu'un long paragraphe.
  */
-  import { ref, onMounted } from 'vue'
-  import { apiGet } from '../config/api'
-  // Rempli de manière asynchrone par l'appel à l'API ci-dessous ; null tant
-  // que la réponse n'est pas arrivée, ce que le template doit gérer.
-  const about = ref(null)
-
-  onMounted(async () => {
-    try {
-      about.value = await apiGet('/api/vitrine/about?page=home')
-    } catch (error) {
-      console.error('Impossible de charger la section "À propos" :', error)
+  defineProps({
+    about: {
+      type: Object,
+      default: null
     }
   })
 

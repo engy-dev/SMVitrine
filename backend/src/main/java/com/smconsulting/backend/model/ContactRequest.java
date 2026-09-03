@@ -1,158 +1,159 @@
 package com.smconsulting.backend.model;
 
+import com.smconsulting.backend.entity.Page;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.ColumnTransformer;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-/**
- * Entité JPA représentant une demande de contact envoyée depuis le site vitrine.
- *
- * Une "entité" est une classe Java qui correspond directement à une table en
- * base de données : chaque instance de ContactRequest correspond à une ligne
- * dans la table "contact_requests", et chaque attribut correspond à une colonne.
- *
- * C'est Hibernate (le moteur ORM utilisé par Spring Data JPA) qui se charge de
- * créer la table et de faire la conversion Java <-> SQL automatiquement.
- */
 @Entity
-@Table(name = "contact_requests")
+@Table(name = "contact_submissions", schema = "vitrine")
 public class ContactRequest {
 
-    /**
-     * Identifiant unique de la demande, généré automatiquement par la base de
-     * données (auto-incrément). C'est notre clé primaire.
-     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private UUID id;
 
-    /** Nom complet de la personne qui a rempli le formulaire. */
-    @Column(nullable = false)
-    private String nomComplet;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "page_id")
+    private Page page;
 
-    /** Adresse e-mail de contact, utilisée pour recontacter le prospect. */
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
+
     @Column(nullable = false)
     private String email;
 
-    /** Numéro de téléphone (optionnel). */
-    @Column
-    private String telephone;
+    private String phone;
 
-    /** Nom de l'entreprise du prospect (optionnel mais très utile pour le suivi commercial). */
-    @Column
-    private String entreprise;
+    private String company;
 
-    /**
-     * Sujet / besoin principal exprimé par le prospect
-     * (ex : "Recrutement", "Formation", "Accompagnement au changement"...).
-     */
-    @Column
-    private String sujet;
+    private String subject;
 
-    /** Message libre décrivant la demande du prospect. */
-    @Column(length = 2000)
+    @Column(nullable = false)
     private String message;
 
-    /**
-     * Date et heure d'envoi de la demande, renseignée automatiquement par le
-     * serveur au moment de l'enregistrement (voir ContactService).
-     */
-    @Column(nullable = false)
-    private LocalDateTime dateEnvoi;
+    @Column(name = "consent_given", nullable = false)
+    private boolean consentGiven;
 
-    /**
-     * Constructeur vide requis par JPA/Hibernate : le framework l'utilise en
-     * interne pour reconstruire des objets à partir de la base de données.
-     */
-    public ContactRequest() {
+    @Column(name = "ip_address")
+    @ColumnTransformer(write = "?::inet")
+    private String ipAddress;
+
+    @Column(name = "user_agent")
+    private String userAgent;
+
+    @Column(name = "has_responded", nullable = false)
+    private boolean responded = false;
+
+    @Column(name = "handled_by")
+    private UUID handledByEmployeeId;
+
+    @Column(name = "handled_at")
+    private LocalDateTime handledAt;
+
+    @Column(name = "internal_notes")
+    private String internalNotes;
+
+    @Column(name = "submitted_at", nullable = false)
+    private LocalDateTime submittedAt;
+
+    protected ContactRequest() {
+        // Constructeur sans argument requis par JPA.
     }
 
-    /**
-     * Constructeur pratique utilisé par notre code métier (ContactService)
-     * pour créer une nouvelle demande à partir des données du formulaire.
-     */
-    public ContactRequest(String nomComplet, String email, String telephone,
-                           String entreprise, String sujet, String message,
-                           LocalDateTime dateEnvoi) {
-        this.nomComplet = nomComplet;
+    public ContactRequest(String fullName, String email, String phone, String company,
+                           String subject, String message, boolean consentGiven,
+                           String ipAddress, String userAgent, LocalDateTime submittedAt) {
+        this.fullName = fullName;
         this.email = email;
-        this.telephone = telephone;
-        this.entreprise = entreprise;
-        this.sujet = sujet;
+        this.phone = phone;
+        this.company = company;
+        this.subject = subject;
         this.message = message;
-        this.dateEnvoi = dateEnvoi;
+        this.consentGiven = consentGiven;
+        this.ipAddress = ipAddress;
+        this.userAgent = userAgent;
+        this.submittedAt = submittedAt;
     }
 
-    // --- Getters et setters -------------------------------------------------
-    // Ils sont nécessaires car Hibernate et Jackson (sérialisation JSON) s'appuient
-    // sur la convention JavaBean (getX()/setX()) pour lire et écrire les champs.
-
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Page getPage() {
+        return page;
     }
 
-    public String getNomComplet() {
-        return nomComplet;
+    public void setPage(Page page) {
+        this.page = page;
     }
 
-    public void setNomComplet(String nomComplet) {
-        this.nomComplet = nomComplet;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getPhone() {
+        return phone;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getCompany() {
+        return company;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getEntreprise() {
-        return entreprise;
-    }
-
-    public void setEntreprise(String entreprise) {
-        this.entreprise = entreprise;
-    }
-
-    public String getSujet() {
-        return sujet;
-    }
-
-    public void setSujet(String sujet) {
-        this.sujet = sujet;
+    public String getSubject() {
+        return subject;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public boolean isConsentGiven() {
+        return consentGiven;
     }
 
-    public LocalDateTime getDateEnvoi() {
-        return dateEnvoi;
+    public String getIpAddress() {
+        return ipAddress;
     }
 
-    public void setDateEnvoi(LocalDateTime dateEnvoi) {
-        this.dateEnvoi = dateEnvoi;
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public boolean isResponded() {
+        return responded;
+    }
+
+    public void setResponded(boolean responded) {
+        this.responded = responded;
+    }
+
+    public UUID getHandledByEmployeeId() {
+        return handledByEmployeeId;
+    }
+
+    public LocalDateTime getHandledAt() {
+        return handledAt;
+    }
+
+    public String getInternalNotes() {
+        return internalNotes;
+    }
+
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
     }
 }

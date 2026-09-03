@@ -12,6 +12,13 @@
  * sous-titre et le bouton d'action doivent être compris en quelques
  * secondes par un visiteur qui découvre le site pour la première fois.
  */
+
+  defineProps({
+    hero: {
+      type: Object,
+      default: null
+    }
+  })
 </script>
 
 <template>
@@ -47,40 +54,33 @@
     </svg>
 
     <div class="container hero__inner">
-      <div class="hero__content">
-        <p class="eyebrow">Conseil en ressources humaines</p>
+      <div v-if="hero" class="hero__content">
+        <p class="eyebrow">{{ hero.eyebrow }}</p>
 
         <h1 class="hero__title">
-          Des organisations plus fortes,
-          <em>construites autour des personnes</em>&nbsp;qui les font vivre.
+          {{ hero.titreAvant }}
+          <em v-if="hero.titreAccent">{{ hero.titreAccent }}</em>
+          {{ hero.titreApres }}
         </h1>
 
         <p class="hero__subtitle">
-          SM Consulting accompagne les dirigeants et les directions RH dans
-          leurs recrutements stratégiques, leurs projets de formation et
-          leurs transformations organisationnelles — avec une approche de
-          terrain, sur mesure et sans jargon inutile.
+          {{ hero.sousTitre }}
         </p>
 
         <div class="hero__actions">
-          <a href="#contact" class="btn-primary">Demander un échange gratuit</a>
-          <a href="#services" class="btn-secondary">Découvrir nos services</a>
+          <a :href="hero.ctaPrincipalUrl" class="btn-primary">{{ hero.ctaPrincipalLabel }}</a>
+          <a :href="hero.ctaSecondaireUrl" class="btn-secondary">{{ hero.ctaSecondaireLabel }}</a>
         </div>
 
         <dl class="hero__stats">
-          <div class="hero__stat">
-            <dt>15&nbsp;ans</dt>
-            <dd>d'expérience terrain en RH et management</dd>
-          </div>
-          <div class="hero__stat">
-            <dt>120+</dt>
-            <dd>missions menées auprès de PME et grands groupes</dd>
-          </div>
-          <div class="hero__stat">
-            <dt>92&nbsp;%</dt>
-            <dd>de clients qui nous recommandent</dd>
+          <div v-for="(stat, index) in hero.stats" :key="index" class="hero__stat">
+            <dt>{{ stat.valeur }}</dt>
+            <dd>{{ stat.libelle }}</dd>
           </div>
         </dl>
+      </div>
+      <div v-else class="hero__content">
+        <p class="eyebrow">Chargement…</p>
       </div>
     </div>
   </section>
